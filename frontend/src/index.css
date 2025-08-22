@@ -1,0 +1,295 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+code {
+    font-family: 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+}
+
+@layer base {
+  :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 221.2 83.2% 53.3%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96%;
+        --secondary-foreground: 222.2 84% 4.9%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96%;
+        --accent-foreground: 222.2 84% 4.9%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 221.2 83.2% 53.3%;
+        --radius: 0.5rem;
+        
+        /* Portfolio Color Palette - Creative Design */
+        --color-black: #151515;
+        --color-white: #fff;
+        --color-dark-grey: #717171;
+        --color-mid-grey: #aaa;
+        --color-grey: #b6cbcb;
+        --color-dark-blue: #1f47e6;
+        --color-mid-blue: #88a2ff;
+        --color-light-blue: #b7fbff;
+        --color-mid-pink: #ff84e4;
+        --color-light-pink: #ffd1e7;
+        --color-mid-purple: #d987ff;
+        --color-mid-yellow: #ffe03d;
+        --color-light-yellow: #f6fd87;
+        --color-dark-orange: #d1903a;
+        --color-mid-orange: #ff965a;
+        --color-dark-green: #a1a500;
+        --color-mid-green: #78d692;
+    }
+  .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 217.2 91.2% 59.8%;
+        --primary-foreground: 222.2 84% 4.9%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 224.3 76.3% 94.1%;
+    }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+}
+
+/* Portfolio specific utility classes */
+@layer utilities {
+  .bg-portfolio-light-pink {
+    background-color: var(--color-light-pink);
+  }
+  
+  .bg-portfolio-mid-purple {
+    background-color: var(--color-mid-purple);
+  }
+  
+  .bg-portfolio-light-yellow {
+    background-color: var(--color-light-yellow);
+  }
+  
+  .bg-portfolio-mid-blue {
+    background-color: var(--color-mid-blue);
+  }
+  
+  .bg-portfolio-mid-green {
+    background-color: var(--color-mid-green);
+  }
+  
+  .bg-portfolio-mid-orange {
+    background-color: var(--color-mid-orange);
+  }
+  
+  .text-portfolio-black {
+    color: var(--color-black);
+  }
+  
+  .text-portfolio-white {
+    color: var(--color-white);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .bg-gradient-creative {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  
+  .bg-gradient-creative-2 {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  }
+  
+  .bg-gradient-creative-3 {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  }
+  
+  .bg-gradient-creative-4 {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  }
+  
+  .bg-gradient-creative-5 {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  }
+}
+
+/* Modern scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+/* Selection styling */
+::selection {
+  background-color: rgba(102, 126, 234, 0.3);
+  color: #2d3748;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus improvements for better accessibility */
+.focus-visible:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Creative card styles */
+.creative-card {
+  @apply rounded-2xl shadow-lg overflow-hidden transition-all duration-300;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.creative-card:hover {
+  @apply shadow-xl;
+  transform: translateY(-5px);
+}
+
+/* Creative button styles */
+.btn-primary {
+  @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.4);
+}
+
+.btn-outline {
+  @apply px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  background: transparent;
+  border: 2px solid #667eea;
+  color: #667eea;
+}
+
+.btn-outline:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Creative section styles */
+.section-creative {
+  @apply py-20 px-4 relative overflow-hidden;
+}
+
+.section-title {
+  @apply text-4xl font-bold text-center mb-4;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  @apply text-lg text-gray-600 text-center max-w-2xl mx-auto mb-12;
+}
+
+/* Creative background elements */
+.floating-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.floating-shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  filter: blur(40px);
+}
+
+.shape-1 {
+  width: 500px;
+  height: 500px;
+  background: #667eea;
+  top: -250px;
+  right: -250px;
+}
+
+.shape-2 {
+  width: 400px;
+  height: 400px;
+  background: #764ba2;
+  bottom: -200px;
+  left: -200px;
+}
+
+.shape-3 {
+  width: 300px;
+  height: 300px;
+  background: #f6ad55;
+  top: 50%;
+  left: 10%;
+}
