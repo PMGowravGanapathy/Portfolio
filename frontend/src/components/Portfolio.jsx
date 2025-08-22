@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import emailjs from "emailjs-com";
+import emailjs from "@emailjs/browser"; // ✅ correct package
+
 
 import { portfolioData, mockFormSubmit, mockResumeDownload } from '../mock';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -108,28 +109,37 @@ const Portfolio = () => {
     });
   };
 
-  const handleFormSubmit = (e) => {
+const handleFormSubmit = (e) => {
   e.preventDefault();
   setIsSubmitting(true);
 
+  const serviceId = "service_aixp4jm";      // 👈 your real service ID
+  const templateId = "template_dsfrseo";    // 👈 your real template ID
+  const publicKey = "W_g8xgkNLhgZITS77";    // 👈 your real public key
+
+  const templateParams = {
+    from_name: formData.name,
+    from_email: formData.email,
+    to_name: "gowrav",       // or whatever you set in template
+    message: formData.message,
+    reply_to: formData.email,
+  };
+
   emailjs
-    .sendForm(
-      "your_service_id",   // from EmailJS dashboard
-      "your_template_id",  // from EmailJS dashboard
-      e.target,
-      "your_user_id"       // from EmailJS account
-    )
+    .send(serviceId, templateId, templateParams, publicKey)
     .then(() => {
       showToast("Message Sent!", "I'll reply soon.");
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: "", email: "", message: "" });
     })
-    .catch(() => {
+    .catch((error) => {
+      console.error("EmailJS Error:", error);
       showToast("Error", "Message failed. Try again.", "destructive");
     })
     .finally(() => {
       setIsSubmitting(false);
     });
 };
+
 
 
   const handleResumeDownload = () => {

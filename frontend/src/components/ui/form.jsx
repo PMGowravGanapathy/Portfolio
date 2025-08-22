@@ -1,82 +1,78 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import emailjs from "@emailjs/browser";
+import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
-const ContactForm = () => {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(null);
+const EmailForm = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState('');
 
-  const onSubmit = (data) => {
-    setIsSubmitting(true);
-    setSubmitStatus(null);
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    // 👀 Debug log
-    console.log("Sending payload:", {
-      name: data.name,
-      email: data.email,
-      message: data.message,
-    });
+    const serviceId = 'service_aixp4jm';
+    const templateId = 'template_dsfrseo';
+    const publicKey = 'W_g8xgkNLhgZITS77';
 
-    emailjs.send(
-      "service_aixp4jm",     // ✅ Service ID
-      "template_ijfjcfn",    // ✅ Template ID
-      {
-        name: data.name,
-        email: data.email,
-        message: data.message,
-      },
-      "3gZsX3mq1Q6UMKujI"    // ✅ Correct Public Key
-    )
-    .then((result) => {
-      console.log("✅ Email sent successfully:", result.text);
-      setSubmitStatus("success");
-      reset();
-    })
-    .catch((error) => {
-      console.error("❌ EmailJS Error:", error);
-      setSubmitStatus("error");
-    })
-    .finally(() => {
-      setIsSubmitting(false);
-    });
+    const templateParams = {
+      from_name: name,
+      from_email: email,
+      to_name: 'gowrav',
+      message: message,
+      reply_to: email,
+    };
+
+    console.log("Sending params:", templateParams);
+
+    emailjs.send(serviceId, templateId, templateParams, publicKey) // 👈 ensure this is send, not sendForm
+      .then((response) => {
+        console.log('✅ Email sent!', response);
+        setStatus('Message sent successfully!');
+        setName('');
+        setEmail('');
+        setMessage('');
+      })
+      .catch((error) => {
+        console.error('❌ Error sending email:', error);
+        setStatus('Failed to send. Try again later.');
+      });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: "600px", margin: "0 auto" }}>
-      <h2>Contact Us</h2>
-
-      {/* Name */}
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
       <input
         type="text"
-        placeholder="Your full name"
-        {...register("name", { required: "Name is required" })}
+        placeholder="Your Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
       />
-      {errors.name && <p>{errors.name.message}</p>}
-
-      {/* Email */}
       <input
         type="email"
-        placeholder="you@example.com"
-        {...register("email", { required: "Email is required" })}
+        placeholder="Your Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
       />
-      {errors.email && <p>{errors.email.message}</p>}
-
-      {/* Message */}
       <textarea
-        placeholder="Your message..."
-        {...register("message", { required: "Message is required" })}
+        rows="5"
+        placeholder="Your Message"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        required
+        className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
       />
-      {errors.message && <p>{errors.message.message}</p>}
-
-      <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Sending..." : "Send"}
+      <button
+        type="submit"
+        className="bg-purple-600 text-white py-2 px-6 rounded-md hover:bg-purple-700 transition-colors"
+      >
+        Send Email
       </button>
-
-      {submitStatus === "success" && <p>✅ Message sent successfully!</p>}
-      {submitStatus === "error" && <p>❌ Failed to send. Check console logs.</p>}
+      {status && <p className="mt-2 text-center text-sm">{status}</p>}
     </form>
   );
 };
 
-export default ContactForm;
+export default EmailForm;
