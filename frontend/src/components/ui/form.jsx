@@ -23,10 +23,10 @@ const ContactForm = () => {
 
     emailjs
       .send(
-        "YOUR_SERVICE_ID",   // EmailJS Service ID
-        "YOUR_TEMPLATE_ID",  // EmailJS Template ID
-        data,                // Form data { name, email, message }
-        "YOUR_PUBLIC_KEY"    // EmailJS Public Key
+        "service_aixp4jm",      // ✅ Your Gmail Service ID
+        "template_ijfjcfn",     // ✅ Your Template ID
+        data,                   // ✅ Form data: { name, email, message }
+        "TI8MO4DpP8pwrWi6V"       // 🔑 Replace with your EmailJS Public Key
       )
       .then(() => {
         alert("✅ Message sent successfully!")
@@ -96,4 +96,3 @@ const ContactForm = () => {
 }
 
 export default ContactForm
-
