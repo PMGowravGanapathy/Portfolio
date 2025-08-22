@@ -1,98 +1,82 @@
-import React from "react"
-import { useForm } from "react-hook-form"
-import emailjs from "emailjs-com"
-
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form"
-
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import emailjs from "@emailjs/browser";
 
 const ContactForm = () => {
-  const form = useForm()
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
 
-  const onSubmit = (data, e) => {
-    e.preventDefault()
+  const onSubmit = (data) => {
+    setIsSubmitting(true);
+    setSubmitStatus(null);
 
-    emailjs
-      .send(
-        "service_aixp4jm",      // ✅ Your Gmail Service ID
-        "template_ijfjcfn",     // ✅ Your Template ID
-        data,                   // ✅ Form data: { name, email, message }
-        "TI8MO4DpP8pwrWi6V"       // 🔑 Replace with your EmailJS Public Key
-      )
-      .then(() => {
-        alert("✅ Message sent successfully!")
-        form.reset()
-      })
-      .catch((err) => {
-        console.error("EmailJS Error:", err)
-        alert("❌ Failed to send message. Try again.")
-      })
-  }
+    // 👀 Debug log
+    console.log("Sending payload:", {
+      name: data.name,
+      email: data.email,
+      message: data.message,
+    });
+
+    emailjs.send(
+      "service_aixp4jm",     // ✅ Service ID
+      "template_ijfjcfn",    // ✅ Template ID
+      {
+        name: data.name,
+        email: data.email,
+        message: data.message,
+      },
+      "3gZsX3mq1Q6UMKujI"    // ✅ Correct Public Key
+    )
+    .then((result) => {
+      console.log("✅ Email sent successfully:", result.text);
+      setSubmitStatus("success");
+      reset();
+    })
+    .catch((error) => {
+      console.error("❌ EmailJS Error:", error);
+      setSubmitStatus("error");
+    })
+    .finally(() => {
+      setIsSubmitting(false);
+    });
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Name */}
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Your full name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <form onSubmit={handleSubmit(onSubmit)} style={{ maxWidth: "600px", margin: "0 auto" }}>
+      <h2>Contact Us</h2>
 
-        {/* Email */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="you@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      {/* Name */}
+      <input
+        type="text"
+        placeholder="Your full name"
+        {...register("name", { required: "Name is required" })}
+      />
+      {errors.name && <p>{errors.name.message}</p>}
 
-        {/* Message */}
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Message</FormLabel>
-              <FormControl>
-                <Textarea rows={5} placeholder="Your message..." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      {/* Email */}
+      <input
+        type="email"
+        placeholder="you@example.com"
+        {...register("email", { required: "Email is required" })}
+      />
+      {errors.email && <p>{errors.email.message}</p>}
 
-        {/* Submit */}
-        <Button type="submit" className="w-full">
-          Send Message
-        </Button>
-      </form>
-    </Form>
-  )
-}
+      {/* Message */}
+      <textarea
+        placeholder="Your message..."
+        {...register("message", { required: "Message is required" })}
+      />
+      {errors.message && <p>{errors.message.message}</p>}
 
-export default ContactForm
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Sending..." : "Send"}
+      </button>
+
+      {submitStatus === "success" && <p>✅ Message sent successfully!</p>}
+      {submitStatus === "error" && <p>❌ Failed to send. Check console logs.</p>}
+    </form>
+  );
+};
+
+export default ContactForm;
