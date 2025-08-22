@@ -1,133 +1,99 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { Controller, FormProvider, useFormContext } from "react-hook-form";
+import React from "react"
+import { useForm } from "react-hook-form"
+import emailjs from "emailjs-com"
 
-import { cn } from "../../lib/utils"
-import { Label } from "@/components/ui/label"
-
-const Form = FormProvider
-
-const FormFieldContext = React.createContext({})
-
-const FormField = (
-  {
-    ...props
-  }
-) => {
-  return (
-    <FormFieldContext.Provider value={{ name: props.name }}>
-      <Controller {...props} />
-    </FormFieldContext.Provider>
-  );
-}
-
-const useFormField = () => {
-  const fieldContext = React.useContext(FormFieldContext)
-  const itemContext = React.useContext(FormItemContext)
-  const { getFieldState, formState } = useFormContext()
-
-  const fieldState = getFieldState(fieldContext.name, formState)
-
-  if (!fieldContext) {
-    throw new Error("useFormField should be used within <FormField>")
-  }
-
-  const { id } = itemContext
-
-  return {
-    id,
-    name: fieldContext.name,
-    formItemId: `${id}-form-item`,
-    formDescriptionId: `${id}-form-item-description`,
-    formMessageId: `${id}-form-item-message`,
-    ...fieldState,
-  }
-}
-
-const FormItemContext = React.createContext({})
-
-const FormItem = React.forwardRef(({ className, ...props }, ref) => {
-  const id = React.useId()
-
-  return (
-    <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
-    </FormItemContext.Provider>
-  );
-})
-FormItem.displayName = "FormItem"
-
-const FormLabel = React.forwardRef(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField()
-
-  return (
-    <Label
-      ref={ref}
-      className={cn(error && "text-destructive", className)}
-      htmlFor={formItemId}
-      {...props} />
-  );
-})
-FormLabel.displayName = "FormLabel"
-
-const FormControl = React.forwardRef(({ ...props }, ref) => {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
-
-  return (
-    <Slot
-      ref={ref}
-      id={formItemId}
-      aria-describedby={
-        !error
-          ? `${formDescriptionId}`
-          : `${formDescriptionId} ${formMessageId}`
-      }
-      aria-invalid={!!error}
-      {...props} />
-  );
-})
-FormControl.displayName = "FormControl"
-
-const FormDescription = React.forwardRef(({ className, ...props }, ref) => {
-  const { formDescriptionId } = useFormField()
-
-  return (
-    <p
-      ref={ref}
-      id={formDescriptionId}
-      className={cn("text-[0.8rem] text-muted-foreground", className)}
-      {...props} />
-  );
-})
-FormDescription.displayName = "FormDescription"
-
-const FormMessage = React.forwardRef(({ className, children, ...props }, ref) => {
-  const { error, formMessageId } = useFormField()
-  const body = error ? String(error?.message ?? "") : children
-
-  if (!body) {
-    return null
-  }
-
-  return (
-    <p
-      ref={ref}
-      id={formMessageId}
-      className={cn("text-[0.8rem] font-medium text-destructive", className)}
-      {...props}>
-      {body}
-    </p>
-  );
-})
-FormMessage.displayName = "FormMessage"
-
-export {
-  useFormField,
+import {
   Form,
+  FormField,
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
-  FormField,
+} from "@/components/ui/form"
+
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+
+const ContactForm = () => {
+  const form = useForm()
+
+  const onSubmit = (data, e) => {
+    e.preventDefault()
+
+    emailjs
+      .send(
+        "YOUR_SERVICE_ID",   // EmailJS Service ID
+        "YOUR_TEMPLATE_ID",  // EmailJS Template ID
+        data,                // Form data { name, email, message }
+        "YOUR_PUBLIC_KEY"    // EmailJS Public Key
+      )
+      .then(() => {
+        alert("✅ Message sent successfully!")
+        form.reset()
+      })
+      .catch((err) => {
+        console.error("EmailJS Error:", err)
+        alert("❌ Failed to send message. Try again.")
+      })
+  }
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* Name */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Your full name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Email */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="you@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Message */}
+        <FormField
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Message</FormLabel>
+              <FormControl>
+                <Textarea rows={5} placeholder="Your message..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Submit */}
+        <Button type="submit" className="w-full">
+          Send Message
+        </Button>
+      </form>
+    </Form>
+  )
 }
+
+export default ContactForm
+

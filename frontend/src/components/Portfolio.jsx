@@ -1,5 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import emailjs from "emailjs-com";
+
 import { portfolioData, mockFormSubmit, mockResumeDownload } from '../mock';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLinkedin, faInstagram, faGithub, faTwitter, faBehance, faDribbble } from "@fortawesome/free-brands-svg-icons";
@@ -106,22 +108,29 @@ const Portfolio = () => {
     });
   };
 
-  const handleFormSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    try {
-      const result = await mockFormSubmit(formData);
-      if (result.success) {
-        showToast("Message Sent!", result.message);
-        setFormData({ name: '', email: '', message: '' });
-      }
-    } catch (error) {
-      showToast("Error", "Something went wrong. Please try again.", "destructive");
-    } finally {
+  const handleFormSubmit = (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  emailjs
+    .sendForm(
+      "your_service_id",   // from EmailJS dashboard
+      "your_template_id",  // from EmailJS dashboard
+      e.target,
+      "your_user_id"       // from EmailJS account
+    )
+    .then(() => {
+      showToast("Message Sent!", "I'll reply soon.");
+      setFormData({ name: '', email: '', message: '' });
+    })
+    .catch(() => {
+      showToast("Error", "Message failed. Try again.", "destructive");
+    })
+    .finally(() => {
       setIsSubmitting(false);
-    }
-  };
+    });
+};
+
 
   const handleResumeDownload = () => {
     mockResumeDownload();
