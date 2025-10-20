@@ -169,7 +169,22 @@ export const portfolioData = {
       tech: "Figma, Prototyping, Wireframing",
       link: "#",
       featured: false
-    }
+    },
+     {
+  id: 6,
+  title: "Expense Tracker App",
+  description: "Full-stack web application to manage daily expenses, categorize transactions, and generate monthly summaries. Includes JWT authentication, visual analytics, and data export features.",
+  category: ["Web Development", "Full Stack", "Finance", "Dashboard"],
+  bgColor: "light-blue",
+  textColor: "black",
+  image: "expense-tracker.png",
+  duration: "2025",
+  role: "Full Stack Developer",
+  tech: "React, Next.js, Express, PostgreSQL, Chart.js, Recharts",
+  link: "#",
+  featured: true
+}
+
   ],
   
   experience: [
